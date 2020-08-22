@@ -6,6 +6,7 @@ namespace Demonstration.Singleton
     public sealed class People
     {
         private static int counter = 0;
+        private static readonly object obj = new object();
 
         public string Name { get; private set; }
         public int Age { get; private set; }
@@ -16,8 +17,14 @@ namespace Demonstration.Singleton
         {
             get
             {
-                if (_instance == null)
-                    _instance = new People();
+                if(_instance == null)
+                {
+                    lock (obj)
+                    {
+                        if (_instance == null)
+                            _instance = new People();
+                    }
+                }
                 return _instance;
             }
         }
@@ -26,6 +33,11 @@ namespace Demonstration.Singleton
         {
             counter++;
             Console.WriteLine($"Called {counter} time(s)");
+        }
+
+        public void ShowDetail(string message)
+        {
+            Console.WriteLine(message);
         }
 
     }

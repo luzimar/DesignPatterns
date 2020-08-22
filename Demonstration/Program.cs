@@ -1,5 +1,6 @@
 ﻿using Demonstration.Singleton;
 using System;
+using System.Threading.Tasks;
 
 namespace Demonstration
 {
@@ -10,11 +11,10 @@ namespace Demonstration
 
             #region Singleton
 
-            People people1 = People.GetInstance;
-
-            People people2 = People.GetInstance;
-
-            People people3 = People.GetInstance;
+            Parallel.Invoke(
+                () => CreatePeople1(),
+                () => CreatePeople2()
+            );
 
             #endregion
 
@@ -22,6 +22,18 @@ namespace Demonstration
 
             Console.ReadKey();
 
+        }
+
+        private static void CreatePeople1()
+        {
+            People people1 = People.GetInstance;
+            people1.ShowDetail("People 1 was created");
+        }
+
+        private static void CreatePeople2()
+        {
+            People people2 = People.GetInstance;
+            people2.ShowDetail("People 2 was created");
         }
     }
 }
