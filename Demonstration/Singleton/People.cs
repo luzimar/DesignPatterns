@@ -6,26 +6,17 @@ namespace Demonstration.Singleton
     public sealed class People
     {
         private static int counter = 0;
-        private static readonly object obj = new object();
 
         public string Name { get; private set; }
         public int Age { get; private set; }
         public EGenre Genre { get; private set; }
 
-        private static People _instance = null;
+        private static readonly Lazy<People> _instance = new Lazy<People>(() => new People());
         public static People GetInstance
         {
             get
             {
-                if(_instance == null)
-                {
-                    lock (obj)
-                    {
-                        if (_instance == null)
-                            _instance = new People();
-                    }
-                }
-                return _instance;
+                return _instance.Value;
             }
         }
 
